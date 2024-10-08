@@ -27,6 +27,16 @@
             Random randomize = new Random();
             _cards = _cards.OrderBy(c => randomize.Next()).ToList();
         }
+        public Card DrawCard()
+        {
+            if (_cards.Count == 0)
+                throw new InvalidOperationException("No more cards in the deck.");
+
+            var card = _cards[0];
+            _cards.RemoveAt(0);
+            return card;
+        }
+
     }
 }
 
