@@ -8,53 +8,46 @@
 
         public BlackjackGame()
         {
-            _deck = new Deck();
+            ResetGame();
+        }
+
+        public void ResetGame()
+        {
+            _deck = new Deck();  // Nowa talia kart
             _player = new Player();
             _dealer = new Player();
         }
 
-        public void PlayGame()
+        public void DealerDrawCard()
         {
-            Console.Clear();
-            Console.WriteLine("Welcome to BlackJack!");
-
-            _player.AddCard(_deck.DrawCard());
-            _player.AddCard(_deck.DrawCard());
             _dealer.AddCard(_deck.DrawCard());
-            _dealer.AddCard(_deck.DrawCard());
+        }
 
-            bool playerTurn = true;
+        public void PlayerDrawCard()
+        {
+            _player.AddCard(_deck.DrawCard());
+        }
 
-            while (playerTurn)
-            {
-                Console.Clear();
-                Console.WriteLine("Your hand:");
+        public bool IsPlayerBusted => _player.IsBusted;
+        public bool IsDealerBusted => _dealer.IsBusted;
+        public int PlayerScore => _player.Score;
+        public int DealerScore => _dealer.Score;
+        public bool HasPlayerBlackjack => _player.HasBlackjack;
+        public bool HasDealerBlackjack => _dealer.HasBlackjack;
 
-                if (_player.HasBlackjack)
-                {
-                    Console.WriteLine("Blackjack! You win!");
-                    return;
-                }
+        public List<Card> GetDealerHand()
+        {
+            return _dealer.GetHand();
+        }
 
-                if (_player.IsBusted)
-                {
-                    Console.WriteLine("You busted! Dealer wins.");
-                    return;
-                }
+        public List<Card> GetPlayerHand()
+        {
+            return _player.GetHand();
+        }
 
-                Console.WriteLine("Do you want to (H)it or (S)tand?");
-                var choice = Console.ReadLine().ToLower();
-                if (choice == "h")
-                {
-                    _player.AddCard(_deck.DrawCard());
-                }
-                else if (choice == "s")
-                {
-                    playerTurn = false;
-                }
-            }
-
-
+        public int GetRemainingCards()
+        {
+            return _deck.CardsRemaining();
         }
     }
 }

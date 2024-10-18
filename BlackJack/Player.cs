@@ -2,32 +2,65 @@
 {
     public class Player
     {
-        public List<Card> Hand { get; private set; }
-        public int Score { get; private set; }
-        public bool HasBlackjack => Score == 21;
-        public bool IsBusted => Score > 21;
+        private List<Card> _hand;
+
         public Player()
         {
-            Hand = new List<Card>();
-            Score = 0;
+            _hand = new List<Card>();
         }
+
         public void AddCard(Card card)
         {
-            Hand.Add(card);
-            Score += card.Value;
+            _hand.Add(card);
+        }
 
-            // Obsługa przypadku, gdy as przekracza 21 punktów
-            if (Score > 21)
+        public int Score
+        {
+            get
             {
-                foreach (var handCard in Hand)
+                int score = 0;
+                int aceCount = 0;
+
+                foreach (var card in _hand)
                 {
-                    if (handCard.Rank == "A" && Score > 21)
+                    score += card.Value;
+                    if (card.Rank == "A")
                     {
-                        Score -= 10;
+                        aceCount++;
                     }
                 }
+
+                while (score > 21 && aceCount > 0)
+                {
+                    score -= 10;
+                    aceCount--;
+                }
+
+                return score;
             }
-        }   
+        }
+
+        public bool HasBlackjack
+        {
+            get
+            {
+                return _hand.Count == 2 && Score == 21;
+            }
+        }
+
+        public bool IsBusted
+        {
+            get
+            {
+                return Score > 21;
+            }
+        }
+
+        public List<Card> GetHand()
+        {
+            return _hand;
+        }
     }
+
 
 }
