@@ -13,7 +13,7 @@
 
         public void ResetGame()
         {
-            _deck = new Deck();  // Nowa talia kart
+            _deck = new Deck();
             _player = new Player();
             _dealer = new Player();
         }

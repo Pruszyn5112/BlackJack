@@ -3,8 +3,7 @@
     public class Deck
     {
         private List<Card> _cards;
-        private const int NumberOfDecks = 4; // Four 52-card decks
-
+        private const int NumberOfDecks = 4; 
         public Deck()
         {
             _cards = new List<Card>();
@@ -12,7 +11,6 @@
             string[] ranks = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
             int[] values = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11 };
 
-            // Create the deck with multiple sets of cards
             for (int d = 0; d < NumberOfDecks; d++)
             {
                 foreach (var suit in suits)

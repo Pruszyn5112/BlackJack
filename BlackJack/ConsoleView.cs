@@ -77,14 +77,11 @@
             Console.WriteLine(message);
         }
 
-        // Adding pseudo-animation delay
         public void AnimateCardDraw()
         {
             Console.WriteLine("Drawing card...");
-            System.Threading.Thread.Sleep(500);  // Half-second delay
+            System.Threading.Thread.Sleep(500);
         }
-
-        // New method for displaying the number of remaining cards in the deck
         public void DisplayRemainingCards(int remainingCards)
         {
             Console.WriteLine($"\nRemaining cards in the deck: {remainingCards}");

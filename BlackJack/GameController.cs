@@ -24,7 +24,7 @@
                 playAgain = (choice == "y");
                 if (playAgain)
                 {
-                    _game.ResetGame(); // Reset the hands, deck remains the same
+                    _game.ResetGame();
                 }
             }
 
@@ -42,7 +42,6 @@
 
             while (playerTurn)
             {
-                // Clear console and redraw cards
                 _view.ClearScreen();
                 _view.DisplayDealerHand(_game.GetDealerHand());
                 _view.DisplayPlayerHand(_game.GetPlayerHand());
@@ -86,7 +85,7 @@
 
         private void DetermineWinner()
         {
-            _view.ClearScreen(); // Clear the screen before showing the result
+            _view.ClearScreen();
             _view.DisplayDealerHand(_game.GetDealerHand());
             _view.DisplayPlayerHand(_game.GetPlayerHand());
 
