@@ -35,10 +35,20 @@
         public bool HasPlayerBlackjack => _player.HasBlackjack;
         public bool HasDealerBlackjack => _dealer.HasBlackjack;
 
-        public List<Card> GetDealerHand()
+        public List<Card> GetDealerHand(bool revealSecondCard = false)
         {
-            return _dealer.GetHand();
+            if (revealSecondCard)
+            {
+                return _dealer.GetHand(); // Zwróć pełną rękę
+            }
+            else
+            {
+                var visibleHand = new List<Card> { _dealer.GetHand()[0] };
+                visibleHand.Add(new Card("Unknown", "Hidden", 0)); // Dodaj kartę zakrytą
+                return visibleHand;
+            }
         }
+
 
         public List<Card> GetPlayerHand()
         {

@@ -1,9 +1,10 @@
-﻿namespace BlackJack
+﻿
+namespace BlackJack
 {
     public class Deck
     {
         private List<Card> _cards;
-        private const int NumberOfDecks = 4; 
+        private const int NumberOfDecks = 4;
         public Deck()
         {
             _cards = new List<Card>();

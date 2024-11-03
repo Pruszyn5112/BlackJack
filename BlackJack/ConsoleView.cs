@@ -2,31 +2,37 @@
 {
     public class ConsoleView
     {
-        public void DisplayDealerHand(List<Card> dealerHand)
-        {
-            Console.WriteLine("Dealer's hand:");
-            DrawCards(dealerHand);
-        }
-
-        public void DisplayPlayerHand(List<Card> playerHand)
-        {
-            Console.WriteLine("Player's hand:");
-            DrawCards(playerHand);
-        }
-
         public void ClearScreen()
         {
             Console.Clear();
         }
 
-        private void DrawCards(List<Card> cards)
+        public void DisplayPlayerHand(List<Card> playerHand)
+        {
+            Console.WriteLine("Player's hand:");
+            DrawCards(playerHand, true);
+        }
+        public void DisplayDealerHand(List<Card> dealerHand, bool showSecondCard)
+        {
+            Console.WriteLine("Dealer's hand:");
+            DrawCards(dealerHand, showSecondCard);
+        }
+
+        private void DrawCards(List<Card> cards, bool showSecondCard)
         {
             int cardOverlap = 5;
             for (int line = 0; line < 7; line++)
             {
                 for (int i = 0; i < cards.Count; i++)
                 {
-                    DrawCardLine(cards[i], line);
+                    if (i == 1 && !showSecondCard)
+                    {
+                        DrawHiddenCard(line);
+                    }
+                    else
+                    {
+                        DrawCardLine(cards[i], line);
+                    }
 
                     if (i < cards.Count - 1)
                     {
@@ -34,6 +40,22 @@
                     }
                 }
                 Console.WriteLine();
+            }
+        }
+
+
+
+        private void DrawHiddenCard(int line)
+        {
+            switch (line)
+            {
+                case 0: Console.Write("┌─────────┐"); break;
+                case 1: Console.Write("│         │"); break;
+                case 2: Console.Write("│         │"); break;
+                case 3: Console.Write("│   ???   │"); break;
+                case 4: Console.Write("│         │"); break;
+                case 5: Console.Write("│         │"); break;
+                case 6: Console.Write("└─────────┘"); break;
             }
         }
 
@@ -82,6 +104,7 @@
             Console.WriteLine("Drawing card...");
             System.Threading.Thread.Sleep(500);
         }
+
         public void DisplayRemainingCards(int remainingCards)
         {
             Console.WriteLine($"\nRemaining cards in the deck: {remainingCards}");

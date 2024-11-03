@@ -43,7 +43,7 @@
             while (playerTurn)
             {
                 _view.ClearScreen();
-                _view.DisplayDealerHand(_game.GetDealerHand());
+                _view.DisplayDealerHand(_game.GetDealerHand(), false); // Nie odkrywa drugiej karty
                 _view.DisplayPlayerHand(_game.GetPlayerHand());
 
                 if (_game.HasPlayerBlackjack)
@@ -78,6 +78,7 @@
             while (_game.DealerScore < 17)
             {
                 _game.DealerDrawCard();
+                _view.AnimateCardDraw();
             }
 
             DetermineWinner();
@@ -86,9 +87,11 @@
         private void DetermineWinner()
         {
             _view.ClearScreen();
-            _view.DisplayDealerHand(_game.GetDealerHand());
-            _view.DisplayPlayerHand(_game.GetPlayerHand());
+            var dealerHand = _game.GetDealerHand(true); // Odkrywa wszystkie karty dealera
+            _view.DisplayDealerHand(dealerHand, true); // Wyświetla rękę dealera, odkrywając drugą kartę
+            _view.DisplayPlayerHand(_game.GetPlayerHand()); // Wyświetla rękę gracza
 
+            // Sprawdzenie, kto wygrał
             if (_game.IsDealerBusted)
             {
                 _view.DisplayMessage("Dealer busted! You win.");
@@ -106,5 +109,7 @@
                 _view.DisplayMessage("It's a tie!");
             }
         }
+
+
     }
 }
