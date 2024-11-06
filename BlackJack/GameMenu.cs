@@ -1,4 +1,6 @@
 ﻿
+using System.Numerics;
+
 namespace BlackJack
 {
     public class MainMenu
@@ -44,9 +46,10 @@ namespace BlackJack
         }
         private void StartGame()
         {
-            BlackjackGame game = new BlackjackGame();
+            Player player = new Player(startingBalance: 100);
+            BlackjackGame game = new BlackjackGame(player);
             ConsoleView view = new ConsoleView();
-            GameController controller = new GameController(game, view);
+            GameController controller = new GameController(game, view, player);
             controller.PlayGame();
         }
     }

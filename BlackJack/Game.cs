@@ -1,4 +1,6 @@
-﻿namespace BlackJack
+﻿using System.Numerics;
+
+namespace BlackJack
 {
     public class BlackjackGame
     {
@@ -7,18 +9,25 @@
         public Player Player => _player;
         private Player _dealer;
 
-        public BlackjackGame()
+        public BlackjackGame(Player player)
         {
-            ResetGame();
+            _player = player;
+            _dealer = new Player();
+            _deck = new Deck();
+            _deck.ShuffleDeck();
         }
 
-        public void ResetGame()
+        /* public void ResetGame()
         {
             _deck = new Deck();
             _player = new Player();
             _dealer = new Player();
+        } */
+        public void ResetGame()
+        {
+            _player.GetHand().Clear();
+            _dealer.GetHand().Clear();
         }
-
         public void DealerDrawCard()
         {
             _dealer.AddCard(_deck.DrawCard());

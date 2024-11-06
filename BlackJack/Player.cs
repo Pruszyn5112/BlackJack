@@ -12,6 +12,7 @@
             Balance = startingBalance;
             CurrentBet = 0;
         }
+
         public void PlaceBet(int amount)
         {
             if (amount > Balance)
@@ -20,6 +21,7 @@
             CurrentBet = amount;
             Balance -= amount;
         }
+
         public void WinBet()
         {
             Balance += CurrentBet * 2;
@@ -31,19 +33,22 @@
             Balance += CurrentBet;
             CurrentBet = 0;
         }
+
         public void BlackJackBet()
         {
-            Balance += (CurrentBet * 3)/2;
+            Balance += (CurrentBet * 3) / 2;
+            CurrentBet = 0;
         }
+
         public void LoseBet()
         {
             CurrentBet = 0;
         }
+
         public void AddCard(Card card)
         {
             _hand.Add(card);
         }
-
         public int Score
         {
             get

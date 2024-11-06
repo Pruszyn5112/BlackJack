@@ -5,10 +5,12 @@
         private BlackjackGame _game;
         private ConsoleView _view;
         private Player _player;
-        public GameController(BlackjackGame game, ConsoleView view)
+
+        public GameController(BlackjackGame game, ConsoleView view, Player player)
         {
             _game = game;
             _view = view;
+            _player = player;
         }
 
         public void PlayGame()
@@ -83,8 +85,7 @@
                 {
                     playerTurn = false;
                 }
-            }
-
+                            }
             DealerTurn();
         }
 
