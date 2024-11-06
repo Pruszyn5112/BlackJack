@@ -4,6 +4,7 @@
     {
         private Deck _deck;
         private Player _player;
+        public Player Player => _player;
         private Player _dealer;
 
         public BlackjackGame()

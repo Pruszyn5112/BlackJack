@@ -6,11 +6,16 @@
         {
             Console.Clear();
         }
-
+        public void DisplayPlayerStatus(int balance, int currentBet)
+        {
+            Console.WriteLine($"Twój balans: {balance} żetonów");
+            Console.WriteLine($"Obecny zakład: {currentBet} żetonów");
+            Console.WriteLine();
+        }
         public void DisplayPlayerHand(List<Card> playerHand)
         {
             Console.WriteLine("Player's hand:");
-            DrawCards(playerHand, true);
+            DrawCards(playerHand, true); 
         }
         public void DisplayDealerHand(List<Card> dealerHand, bool showSecondCard)
         {
@@ -69,7 +74,7 @@
                 case 0: Console.Write("┌─────────┐"); break;
                 case 1: Console.Write($"│{rank,-2}       │"); break;
                 case 2: Console.Write("│         │"); break;
-                case 3: Console.Write($"│    {suit}     │"); break;
+                case 3: Console.Write($"│    {suit}    │"); break;
                 case 4: Console.Write("│         │"); break;
                 case 5: Console.Write($"│       {rank,2}│"); break;
                 case 6: Console.Write("└─────────┘"); break;
@@ -86,6 +91,22 @@
                 case "spades": return "♠";
                 default: return "?";
             }
+        }
+
+        public int GetBetAmount()
+        {
+            Console.Write("Wpisz kwotę zakładu: ");
+            int bet;
+            while (!int.TryParse(Console.ReadLine(), out bet) || bet <= 0)
+            {
+                Console.Write("Nieprawidłowa kwota. Wpisz poprawną kwotę zakładu: ");
+            }
+            return bet;
+        }
+
+        public void DisplayBalance(int balance)
+        {
+            Console.WriteLine($"Twój balans: {balance} żetonów");
         }
 
         public string GetPlayerInput()

@@ -42,7 +42,8 @@ namespace BlackJack
         {
             if (_cards.Count == 0)
             {
-                throw new InvalidOperationException("No more cards in the deck.");
+                ShuffleDeck();
+                //throw new InvalidOperationException("No more cards in the deck.");
             }
             var card = _cards[0];
             _cards.RemoveAt(0);

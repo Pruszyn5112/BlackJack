@@ -4,7 +4,7 @@
     {
         private BlackjackGame _game;
         private ConsoleView _view;
-
+        private Player _player;
         public GameController(BlackjackGame game, ConsoleView view)
         {
             _game = game;
@@ -33,6 +33,19 @@
 
         private void StartRound()
         {
+            try
+            {
+                int betAmount = _view.GetBetAmount();
+                _game.Player.PlaceBet(betAmount);
+            }
+            catch (Exception ex)
+            {
+                _view.DisplayMessage(ex.Message);
+                return;
+            }
+
+            _view.DisplayPlayerStatus(_game.Player.Balance, _game.Player.CurrentBet);
+
             _game.DealerDrawCard();
             _game.DealerDrawCard();
             _game.PlayerDrawCard();
@@ -49,12 +62,14 @@
                 if (_game.HasPlayerBlackjack)
                 {
                     _view.DisplayMessage("Blackjack! You win!");
+                    _game.Player.BlackJackBet();
                     return;
                 }
 
                 if (_game.IsPlayerBusted)
                 {
                     _view.DisplayMessage("You busted! Dealer wins.");
+                    _game.Player.LoseBet();
                     return;
                 }
 
@@ -95,21 +110,24 @@
             if (_game.IsDealerBusted)
             {
                 _view.DisplayMessage("Dealer busted! You win.");
+                _game.Player.WinBet();
             }
             else if (_game.DealerScore > _game.PlayerScore)
             {
                 _view.DisplayMessage("Dealer wins.");
+                _game.Player.LoseBet();
             }
             else if (_game.DealerScore < _game.PlayerScore)
             {
                 _view.DisplayMessage("You win!");
+                _game.Player.WinBet();
             }
             else
             {
                 _view.DisplayMessage("It's a tie!");
+                _game.Player.TieBet();
             }
+            _view.DisplayPlayerStatus(_game.Player.Balance, _game.Player.CurrentBet);
         }
-
-
     }
 }

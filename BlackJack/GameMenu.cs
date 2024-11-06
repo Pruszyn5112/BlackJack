@@ -18,8 +18,10 @@ namespace BlackJack
                         StartGame();
                         break;
                     case "2":
-                        Console.WriteLine("Wychodzenie z gry. Dziękujemy za grę!");
+                        AddBalance();
                         return;
+                 //   case "3":
+                   //     Console.WriteLine("Wychodzenie z gry. Dziękujemy za grę!");
                     default:
                         Console.WriteLine("Nieprawidłowy wybór. Wybierz 1 lub 2.");
                         break;
@@ -31,10 +33,15 @@ namespace BlackJack
         {
             Console.WriteLine("Witamy w Blackjacku!");
             Console.WriteLine("1. Rozpocznij nową grę");
-            Console.WriteLine("2. Wyjdź");
+            Console.WriteLine("2. Dodaj balans");
+            Console.WriteLine("3. Wyjdź");
             Console.Write("Wybierz opcję: ");
         }
 
+        private void AddBalance()
+        {
+
+        }
         private void StartGame()
         {
             BlackjackGame game = new BlackjackGame();
