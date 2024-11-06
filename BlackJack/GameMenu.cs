@@ -47,7 +47,9 @@ namespace BlackJack
         private void StartGame()
         {
             Player player = new Player(startingBalance: 100);
-            BlackjackGame game = new BlackjackGame(player);
+            Deck deck = new Deck(); 
+            deck.ShuffleDeck();
+            BlackjackGame game = new BlackjackGame(player, deck);
             ConsoleView view = new ConsoleView();
             GameController controller = new GameController(game, view, player);
             controller.PlayGame();

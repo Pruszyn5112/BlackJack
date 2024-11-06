@@ -9,12 +9,11 @@ namespace BlackJack
         public Player Player => _player;
         private Player _dealer;
 
-        public BlackjackGame(Player player)
+        public BlackjackGame(Player player, Deck deck)
         {
             _player = player;
             _dealer = new Player();
-            _deck = new Deck();
-            _deck.ShuffleDeck();
+            _deck = deck;
         }
 
         /* public void ResetGame()
