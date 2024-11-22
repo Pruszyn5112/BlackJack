@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlackJack.Controllers;
+using BlackJack.Views;
 
 namespace BlackJack
 {
@@ -6,10 +7,10 @@ namespace BlackJack
     {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8; // Bez tego nie wyświetlają się kolory kart (znaczki)
-
-            MainMenu menu = new MainMenu();
-            menu.ShowMenu();
+            var initialBalance = 1000m; // Initial balance for the player
+            var controller = new GameController(initialBalance);
+            var view = new GameView(controller);
+            view.DisplayMainMenu();
         }
     }
 }
