@@ -70,7 +70,11 @@ namespace BlackJack.Views
 
                 if (_controller.Player.CanSplit())
                 {
-                    Console.WriteLine("Choose an option: (1) Hit (2) Stay (3) Split");
+                    Console.WriteLine("Choose an option: (1) Hit (2) Stay (3) Split (4) Double Down");
+                }
+                else if (_controller.Player.CanDoubleDown())
+                {
+                    Console.WriteLine("Choose an option: (1) Hit (2) Stay (4) Double Down");
                 }
                 else
                 {
@@ -82,24 +86,39 @@ namespace BlackJack.Views
                 if (choice == "1")
                 {
                     _controller.PlayerHit();
-                    if (_controller.IsGameOver())
+                    if (_controller.Player.IsCurrentHandFinished())
                     {
-                        break;
+                        if (!_controller.Player.MoveToNextHand())
+                        {
+                            _isDealerTurn = true;
+                            _controller.DealerTurn();
+                            break;
+                        }
                     }
                 }
                 else if (choice == "2")
                 {
-                    _isDealerTurn = true;
-                    _controller.DealerTurn();
-                    break;
+                    if (!_controller.Player.MoveToNextHand())
+                    {
+                        _isDealerTurn = true;
+                        _controller.DealerTurn();
+                        break;
+                    }
                 }
                 else if (choice == "3" && _controller.Player.CanSplit())
                 {
                     _controller.SplitHand();
                 }
+                else if (choice == "4" && _controller.Player.CanDoubleDown())
+                {
+                    _controller.DoubleDown();
+                    _isDealerTurn = true;
+                    _controller.DealerTurn();
+                    break;
+                }
                 else
                 {
-                    Console.WriteLine("Invalid choice. Please choose (1) Hit, (2) Stay, or (3) Split.");
+                    Console.WriteLine("Invalid choice. Please choose (1) Hit, (2) Stay, (3) Split, or (4) Double Down.");
                 }
             }
 

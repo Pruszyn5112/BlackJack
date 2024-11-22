@@ -66,6 +66,12 @@ namespace BlackJack.Controllers
         {
             foreach (var hand in Player.Hands)
             {
+                decimal betAmount = CurrentBet;
+                if (Player.HasDoubledDown)
+                {
+                    betAmount *= 2; // Double the bet amount if the player has doubled down
+                }
+
                 if (hand.HandValue > 21)
                 {
                     // Player loses, no balance update needed
@@ -74,16 +80,16 @@ namespace BlackJack.Controllers
                 {
                     if (hand.HandValue == 21 && hand.GetCards().Count == 2)
                     {
-                        Player.WinBet(CurrentBet * 2.5m); // 3:2 payout for Blackjack
+                        Player.WinBet(betAmount * 1.5m); // 3:2 payout for Blackjack
                     }
                     else
                     {
-                        Player.WinBet(CurrentBet * 2); // 2:1 payout for regular win
+                        Player.WinBet(betAmount * 2); // 2:1 payout for regular win
                     }
                 }
                 else if (hand.HandValue == Dealer.HandValue)
                 {
-                    Player.WinBet(CurrentBet); // Return the bet for a tie
+                    Player.WinBet(betAmount); // Return the bet for a tie
                 }
             }
         }
@@ -94,6 +100,19 @@ namespace BlackJack.Controllers
             {
                 Player.SplitHand();
                 Player.PlaceBet(CurrentBet); // Place an equal bet on the second hand
+            }
+        }
+
+        public void DoubleDown()
+        {
+            if (Player.CanDoubleDown())
+            {
+                Player.DoubleDown(CurrentBet); // Pass the current bet amount
+                Player.AddCard(Deck.DrawCard());
+                if (!Player.MoveToNextHand())
+                {
+                    DealerTurn();
+                }
             }
         }
     }
