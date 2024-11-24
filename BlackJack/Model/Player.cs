@@ -10,6 +10,7 @@ namespace BlackJack.Models
         public decimal Balance { get; private set; }
         public int CurrentHandIndex { get; set; }
         public bool HasDoubledDown { get; private set; }
+        public decimal InsuranceBet { get; private set; }
 
         public Player(string name, decimal initialBalance)
         {
@@ -18,6 +19,7 @@ namespace BlackJack.Models
             Balance = initialBalance;
             CurrentHandIndex = 0;
             HasDoubledDown = false;
+            InsuranceBet = 0;
         }
 
         public void AddCard(Card card)
@@ -52,7 +54,7 @@ namespace BlackJack.Models
         {
             if (Hands.Count > 1) return false;
             var cards = Hands[0].GetCards();
-            return cards.Count == 2 && cards[0].Rank == cards[1].Rank;
+            return cards.Count == 2 && cards[0].Value == cards[1].Value;
         }
 
         public void SplitHand()
@@ -91,6 +93,33 @@ namespace BlackJack.Models
             if (!CanDoubleDown()) throw new InvalidOperationException("Cannot double down.");
             PlaceBet(currentBet); // Double the bet
             HasDoubledDown = true;
+        }
+        public bool CanPlaceInsuranceBet()
+        {
+            return Hands[CurrentHandIndex].GetCards().Count == 2 && InsuranceBet == 0;
+        }
+
+        public void PlaceInsuranceBet(decimal currentBet)
+        {
+            if (!CanPlaceInsuranceBet()) throw new InvalidOperationException("Cannot place insurance bet.");
+            decimal insuranceAmount = currentBet / 2;
+            if (insuranceAmount > Balance)
+            {
+                throw new InvalidOperationException("Insufficient balance to place insurance bet.");
+            }
+            Balance -= insuranceAmount;
+            InsuranceBet = insuranceAmount;
+        }
+
+        public void WinInsuranceBet()
+        {
+            Balance += InsuranceBet * 3; // 2:1 payoff plus the original bet
+            InsuranceBet = 0;
+        }
+
+        public void LoseInsuranceBet()
+        {
+            InsuranceBet = 0;
         }
     }
 }

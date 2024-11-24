@@ -1,4 +1,5 @@
 ﻿using BlackJack.Models;
+using BlackJack.Views;
 
 namespace BlackJack.Controllers
 {
@@ -8,12 +9,14 @@ namespace BlackJack.Controllers
         public Player Player { get; private set; }
         public Dealer Dealer { get; private set; }
         public decimal CurrentBet { get; private set; }
+        private readonly GameView _gameView;
 
         public GameController(decimal initialBalance)
         {
             Deck = new Deck();
             Player = new Player("Player", initialBalance);
             Dealer = new Dealer();
+            _gameView = new GameView(this); // Initialize GameView with the controller
         }
 
         public void StartGame(decimal betAmount)
@@ -113,6 +116,46 @@ namespace BlackJack.Controllers
                 {
                     DealerTurn();
                 }
+            }
+        }
+
+        private Card GetDealerFaceUpCard()
+        {
+            var cards = Dealer.Hand.GetCards(); // Assuming GetCards() returns a list of cards
+            return cards.Count > 0 ? cards[0] : null!;
+        }
+
+        public void PlaceInsuranceBet()
+        {
+            Card faceUpCard = GetDealerFaceUpCard();
+            if (faceUpCard != null && faceUpCard.Value == 11)
+            {
+                Player.PlaceInsuranceBet(CurrentBet); // Pass the current bet amount
+            }
+            else
+            {
+                throw new InvalidOperationException("Insurance bet can only be placed when dealer's face-up card is an ace.");
+            }
+        }
+
+        public void ResolveGame()
+        {
+            // Check insurance bet
+            bool insuranceWon = Dealer.HandValue == 21;
+            CheckInsurance();
+            _gameView.DisplayInsuranceBetResult(insuranceWon);
+            _gameView.DisplayGameSummary(); // Display game summary after resolving the game
+        }
+
+        public void CheckInsurance()
+        {
+            if (Dealer.HandValue == 21)
+            {
+                Player.WinInsuranceBet();
+            }
+            else
+            {
+                Player.LoseInsuranceBet();
             }
         }
     }
