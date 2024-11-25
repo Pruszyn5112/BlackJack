@@ -54,7 +54,11 @@ namespace BlackJack.Views
                 {
                     AnsiConsole.Markup("[red]Bet amount must be greater than zero. Please enter a valid amount.[/]\n");
                 }
-            } while (betAmount <= 0);
+                else if (betAmount > _controller.Player.Balance)
+                {
+                    AnsiConsole.Markup("[red]Insufficient balance to place bet. Please enter a valid amount.[/]\n");
+                }
+            } while (betAmount <= 0 || betAmount > _controller.Player.Balance);
 
             _controller.StartGame(betAmount);
 
@@ -62,7 +66,16 @@ namespace BlackJack.Views
             if (_controller.Dealer.Hand.GetCards()[0].Value == 11)
             {
                 DisplayInsuranceBetOption();
-                var insuranceChoice = AnsiConsole.Ask<string>("Enter your choice (yes/no):").ToLower();
+                string insuranceChoice;
+                do
+                {
+                    insuranceChoice = AnsiConsole.Ask<string>("Enter your choice (yes/no):").ToLower();
+                    if (insuranceChoice != "yes" && insuranceChoice != "no")
+                    {
+                        AnsiConsole.Markup("[red]Invalid choice. Please enter 'yes' or 'no'.[/]\n");
+                    }
+                } while (insuranceChoice != "yes" && insuranceChoice != "no");
+
                 if (insuranceChoice == "yes")
                 {
                     _controller.PlaceInsuranceBet();
@@ -145,6 +158,7 @@ namespace BlackJack.Views
             AnsiConsole.Markup($"[bold yellow]Your new balance is: {_controller.Player.Balance:C}[/]\n");
             DisplayGameSummary();
         }
+
 
         public void DisplayInsuranceBetOption()
         {
