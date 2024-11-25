@@ -7,7 +7,7 @@ namespace BlackJack
     {
         static void Main(string[] args)
         {
-            var initialBalance = 1000m; // Initial balance for the player
+            var initialBalance = 1000;
             var controller = new GameController(initialBalance);
             var view = new GameView(controller);
             view.DisplayMainMenu();

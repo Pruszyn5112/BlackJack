@@ -113,7 +113,7 @@ namespace BlackJack.Models
 
         public void WinInsuranceBet()
         {
-            Balance += InsuranceBet * 3; // 2:1 payoff plus the original bet
+            Balance += InsuranceBet * 3; // 2:1 payoff + original bet
             InsuranceBet = 0;
         }
 

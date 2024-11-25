@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BlackJack.Controllers;
 using BlackJack.Models;
 using Spectre.Console;
@@ -42,10 +43,22 @@ namespace BlackJack.Views
         public void DisplayGame()
         {
             AnsiConsole.Clear();
+            _isDealerTurn = false; // Reset the dealer turn flag
             AnsiConsole.Markup($"[bold yellow]Your current balance is: {_controller.Player.Balance:C}[/]\n");
             var betAmount = AnsiConsole.Ask<decimal>("Enter your bet amount:");
 
             _controller.StartGame(betAmount);
+
+            // Check for insurance bet option
+            if (_controller.Dealer.Hand.GetCards()[0].Value == 11)
+            {
+                DisplayInsuranceBetOption();
+                var insuranceChoice = AnsiConsole.Ask<string>("Enter your choice (yes/no):").ToLower();
+                if (insuranceChoice == "yes")
+                {
+                    _controller.PlaceInsuranceBet();
+                }
+            }
 
             if (_controller.IsBlackjack())
             {
@@ -153,8 +166,8 @@ namespace BlackJack.Views
 
         public void DisplayGameSummary()
         {
-            AnsiConsole.Markup($"[bold green]{_controller.GetWinner()}[/]\n");
-            AnsiConsole.Markup($"[bold yellow]Your final balance is: {_controller.Player.Balance:C}[/]\n");
+          //  AnsiConsole.Markup($"[bold green]{_controller.GetWinner()}[/]\n");
+          // AnsiConsole.Markup($"[bold yellow]Your final balance is: {_controller.Player.Balance:C}[/]\n");
 
             var choice = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
@@ -197,27 +210,85 @@ namespace BlackJack.Views
 
         private void DisplayHand(Hand hand)
         {
-            foreach (var card in hand.GetCards())
+            var cards = hand.GetCards();
+            var cardLines = new List<string[]>();
+
+            foreach (var card in cards)
             {
-                AnsiConsole.Markup($"[bold yellow]{card.Rank} of {card.Suit}[/]\n");
+                cardLines.Add(GetCardAsciiArtLines(card));
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                foreach (var cardLine in cardLines)
+                {
+                    AnsiConsole.Markup(cardLine[i]);
+                }
+                AnsiConsole.WriteLine();
             }
         }
 
         private void DisplayDealerHand()
         {
             var cards = _controller.Dealer.Hand.GetCards();
-            AnsiConsole.Markup($"[bold yellow]{cards[0].Rank} of {cards[0].Suit}[/]\n");
+            var cardLines = new List<string[]>();
+
+            cardLines.Add(GetCardAsciiArtLines(cards[0]));
             if (_isDealerTurn)
             {
                 for (int i = 1; i < cards.Count; i++)
                 {
-                    AnsiConsole.Markup($"[bold yellow]{cards[i].Rank} of {cards[i].Suit}[/]\n");
+                    cardLines.Add(GetCardAsciiArtLines(cards[i]));
                 }
             }
             else
             {
-                AnsiConsole.Markup("[bold yellow]Hidden Card[/]\n");
+                cardLines.Add(GetCardAsciiArtLines(null)); // Hidden card
             }
+
+            for (int i = 0; i < 9; i++)
+            {
+                foreach (var cardLine in cardLines)
+                {
+                    AnsiConsole.Markup(cardLine[i]);
+                }
+                AnsiConsole.WriteLine();
+            }
+        }
+
+        private string[] GetCardAsciiArtLines(Card card)
+        {
+            if (card == null)
+            {
+                return new string[]
+                {
+                    "┌─────────┐",
+                    "│░░░░░░░░░│",
+                    "│░░░░░░░░░│",
+                    "│░░░░░░░░░│",
+                    "│░░░░░░░░░│",
+                    "│░░░░░░░░░│",
+                    "│░░░░░░░░░│",
+                    "│░░░░░░░░░│",
+                    "└─────────┘"
+                };
+            }
+
+            string rank = card.Rank.ToString();
+            string suit = card.Suit.ToString().Substring(0, 1);
+
+            return new string[]
+            {
+                "┌─────────┐",
+                $"│{rank,-2}       │",
+                "│         │",
+                "│         │",
+                $"│    {suit}    │",
+                "│         │",
+                "│         │",
+                $"│       {rank,2}│",
+                "└─────────┘"
+            };
         }
     }
 }
