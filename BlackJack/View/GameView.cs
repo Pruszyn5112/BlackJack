@@ -35,7 +35,7 @@ namespace BlackJack.Views
                 else if (choice == "Exit")
                 {
                     AnsiConsole.Markup("[bold green]Thank you for playing![/]");
-                    break;
+                    Environment.Exit(0);
                 }
             }
         }
@@ -45,7 +45,16 @@ namespace BlackJack.Views
             AnsiConsole.Clear();
             _isDealerTurn = false; // Reset the dealer turn flag
             AnsiConsole.Markup($"[bold yellow]Your current balance is: {_controller.Player.Balance:C}[/]\n");
-            var betAmount = AnsiConsole.Ask<decimal>("Enter your bet amount:");
+
+            decimal betAmount;
+            do
+            {
+                betAmount = AnsiConsole.Ask<decimal>("Enter your bet amount:");
+                if (betAmount <= 0)
+                {
+                    AnsiConsole.Markup("[red]Bet amount must be greater than zero. Please enter a valid amount.[/]\n");
+                }
+            } while (betAmount <= 0);
 
             _controller.StartGame(betAmount);
 
