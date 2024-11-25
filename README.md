@@ -65,5 +65,3 @@ The `GameView` class handles the user interface and interactions with the player
 
 Spectre console was  used for text-based UI.
 
-## Basic strategies
-![alt text](image.png)
