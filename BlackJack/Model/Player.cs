@@ -37,13 +37,14 @@ namespace BlackJack.Models
             HasDoubledDown = false;
         }
 
-        public void PlaceBet(decimal amount)
+        public bool PlaceBet(decimal amount)
         {
             if (amount > Balance)
             {
-                throw new InvalidOperationException("Insufficient balance to place bet.");
+                return false;
             }
             Balance -= amount;
+            return true;
         }
 
         public void WinBet(decimal amount)
@@ -56,16 +57,20 @@ namespace BlackJack.Models
             var cards = Hands[0].GetCards();
             return cards.Count == 2 && cards[0].Value == cards[1].Value;
         }
-
-        public void SplitHand()
+        public bool SplitHand(decimal currentBet)
         {
-            if (!CanSplit()) throw new InvalidOperationException("Cannot split hand.");
+            if (!CanSplit()) return false;
+            if (currentBet > Balance) return false;
+
             var cards = Hands[0].GetCards();
             Hands.Clear();
             Hands.Add(new Hand());
             Hands.Add(new Hand());
             Hands[0].AddCard(cards[0]);
             Hands[1].AddCard(cards[1]);
+
+            PlaceBet(currentBet);
+            return true;
         }
 
         public bool IsCurrentHandFinished()

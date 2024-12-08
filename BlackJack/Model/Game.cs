@@ -98,7 +98,7 @@ namespace BlackJack.Model
         {
             if (Player.CanSplit())
             {
-                Player.SplitHand();
+                Player.SplitHand(CurrentBet);
                 Player.PlaceBet(CurrentBet);
             }
         }
