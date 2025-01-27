@@ -2,7 +2,7 @@
 
 namespace BlackJack.Model
 {
-    internal class Game
+    public class Game
     {
         public Deck Deck { get; private set; }
         public Player Player { get; private set; }
